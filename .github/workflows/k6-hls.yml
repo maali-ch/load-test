@@ -1,0 +1,23 @@
+name: HLS Load Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  hls-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install k6
+        run: |
+          sudo apt update
+          sudo apt install -y gnupg2
+          curl -s https://dl.k6.io/key.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/k6-archive-keyring.gpg > /dev/null
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt update && sudo apt install -y k6
+
+      - name: Run HLS test
+        run: k6 run hls-test.js
