@@ -11,8 +11,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Build Docker image
-        run: docker build -t hls-test .
+      - name: Pull streaming load test image
+        run: docker pull unifiedstreaming/streaming-load-testing
 
       - name: Run HLS load test
         run: |
@@ -22,4 +22,4 @@ jobs:
             -e mode=vod \
             -e play_mode=full_playback \
             unifiedstreaming/streaming-load-testing \
-            --no-web -c 10 -r 5 --run-time 60s --only-summary
+            --no-web -c 50 -r 10 --run-time 1m --only-summary
